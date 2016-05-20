@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 export default class App extends Component {
   constructor(props){
     super(props);
-    window.socket = io(Meteor.settings.serverEngineUrl);
+    window.socket = io(Meteor.settings.public.serverEngineUrl);
   }
   onOpenNavMenu(e){
     $(".mobile-side-nav").animate({width:'toggle'}, 350);
