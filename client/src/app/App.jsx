@@ -10,7 +10,7 @@ export default class App extends Component {
       <div className="app-div">
         <div className="navbar-minimal row">
           <div className="navbar-minimal-col col s3">
-            <img className="logo" src="/images/logo.png" />
+            <img className="logo" src="/images/logo-full.png" />
           </div>
           <div className="navbar-minimal-col col s9 right-align nav-bar-link-menu">
             <ul>
