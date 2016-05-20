@@ -49,7 +49,7 @@ export default class Home extends Component {
   render() {
     return(
       <div className="home-div">
-        <div className="shade">
+        <div className="shade hide-on-med-and-down">
         </div>
         <div className="vertical-align-container">
           <div className="vertical-align-content row">
@@ -58,7 +58,7 @@ export default class Home extends Component {
               <div className="col s9 offset-s3 head-line"> Play Smite. </div>
               <div className="col s7 offset-s5 queue-button-line">
                 <button data-target="queueDialog"
-                        className="btn-large btn-floating  modal-trigger waves-effect waves-light light-green accent-4"
+                        className="btn btn-floating  modal-trigger waves-effect waves-light light-green accent-4"
                         type="submit"
                         onClick={this.onQueueClick}>
                   <i className="large material-icons">launch</i>
