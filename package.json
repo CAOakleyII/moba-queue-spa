@@ -2,7 +2,7 @@
   "name": "moba-queue",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run --settings config/settings.json"
   },
   "dependencies": {
     "meteor-node-stubs": "^0.2.3",

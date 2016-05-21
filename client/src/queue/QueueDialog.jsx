@@ -34,9 +34,15 @@ export default class QueueDialog extends Component {
       }
     });
 
+    // Send data to the server, set data in local storage.
+    socket.emit('join-queue', data);
+    window.inQueue = true;
     localStorage.setItem('queueData', JSON.stringify(data));
 
-    socket.emit('join-queue', data);
+    // open wait dialog
+    $('#queueWaitDialog').trigger('queue:start');
+    $('.queue-wait-trigger').click();
+
   }
   mapRoles(role, index) {
     return (
