@@ -1,5 +1,5 @@
-import { Component } from 'react';
-export default class PartyDialog extends Component {
+import { Component, PropTypes } from 'react';
+class PartyDialog extends Component {
   constructor(props) {
     super(props);
 
@@ -16,20 +16,26 @@ export default class PartyDialog extends Component {
         user.hasAccepted = true;
       }
     });
-    console.log('user accepted' + userIgn);
-    console.log(this.state);
     this.setState(this.state);
+
+    if (this.state.party.every((user) => { return user.hasAccepted })) {
+      $('#partyDialog').closeModal();
+      this.context.router.push('/party');
+    }
   }
   onAcceptPartyClick(e) {
     socket.emit('accept-party');
   }
   onPartyFound(data){
-    console.log(data);
     this.state.party = data;
     this.setState(this.state);
 
-    $('#partyDialog').openModal();
+    window.inQueue = false;
+    $('#partyDialog').openModal({
+      dismissible: false
+    });
     $('#queueWaitDialog').closeModal();
+    $(".in-queue-toast").animate({height:'hide'}, 350);
   }
   mapRoles(role, index){
     return(<span  className="party-role-item" key={index}> { role }  </span>)
@@ -70,20 +76,24 @@ export default class PartyDialog extends Component {
     return(
       <div className="partydialog-div">
         <div className="popup">
-          <div className="party-dialog">
-            <div id="partyDialog" className="modal">
-             <div>
-             <ul className="no-margin collection with-header">
-                <li className="collection-header center">
-                    <h5>Your Party</h5>
-                 </li>
-                { this.state.party.map(this.mapPartyList.bind(this))}
-               </ul>
-             </div>
-            </div>
+          <div id="partyDialog" className="party-dialog modal">
+           <div>
+           <ul className="no-margin collection with-header">
+              <li className="collection-header center">
+                  <h5>Your Party</h5>
+               </li>
+              { this.state.party.map(this.mapPartyList.bind(this))}
+             </ul>
+           </div>
           </div>
         </div>
       </div>
     )
   }
 }
+
+PartyDialog.contextTypes = {
+  router: PropTypes.object.isRequired
+};
+
+export default PartyDialog;
