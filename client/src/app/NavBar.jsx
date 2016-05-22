@@ -16,7 +16,7 @@ export default class NavBar extends Component {
         </div>
         <div className="navbar-minimal-col col l9 right-align nav-bar-link-menu hide-on-med-and-down">
           <ul>
-            <li className="nav-item"> LOGIN </li>
+            <li className="nav-item"><a href="#" data-position="bottom" className="tooltipped" data-delay="50" data-tooltip="Accounts Coming Soon!"> LOGIN</a></li>
             <li className="nav-item"><Link to="/party">PARTY</Link></li>
           </ul>
         </div>
@@ -27,7 +27,7 @@ export default class NavBar extends Component {
         </div>
         <div id="mobile-side-nav" className="mobile-side-nav">
           <ul id="slide-out" className="side-nav-list">
-            <li className="nav-item side-item"> Login </li>
+            <li className="nav-item side-item" data-position="bottom" data-delay="50" data-tooltip="Accounts Coming Soon!"> Login </li>
             <li className="nav-item side-item"> <Link to="/party"> Party </Link> </li>
           </ul>
         </div>
