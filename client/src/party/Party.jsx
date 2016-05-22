@@ -13,6 +13,14 @@ export default class Party extends Component {
     socket.emit('retrieve-party');
     socket.on('retrieve-party', this.onRetrieveParty.bind(this));
     socket.on('party-message', this.onReceivedMessage.bind(this));
+    if (innerWidth > 600) {
+      $('.chat').width(window.innerWidth  - 210);
+    }
+    window.onresize = function(){
+      if (innerWidth > 600) {
+        $('.chat').width(window.innerWidth  - 210);
+      }
+    };
     $('.mobile-party-list').animate({width:'8.333333%'}, 0);
   }
   onRetrieveParty(party){
@@ -32,6 +40,7 @@ export default class Party extends Component {
   onReceivedMessage(message){
     this.state.chat.push(message);
     this.setState(this.state);
+    $('.chat').scrollTop($('.chat')[0].scrollHeight);
   }
   btnSlideOpen(e){
     $('.mobile-party-list').animate({width:'60%'}, 350);
@@ -87,7 +96,7 @@ export default class Party extends Component {
               { this.state.party.map(this.mapParty.bind(this)) }
             </div>
           </div>
-          <div className="col m1 party-list hide-on-small-only">
+          <div className="col m1 party-list desktop-party-list hide-on-small-only">
             <div className="party-header">
                 <h5> Party </h5>
             </div>
@@ -95,6 +104,7 @@ export default class Party extends Component {
           </div>
           <div className="col m11 s11 offset-s1 chat-box">
             <div className="chat">
+              { this.state.party.length == 0 ? <h5 className="center-align"> No Party <br /> Please Queue</h5>  : null  }
               { this.state.chat.map(this.mapChat.bind(this)) }
             </div>
             <div className="message">
@@ -102,6 +112,8 @@ export default class Party extends Component {
                 <input placeholder="Enter your message..." name="text" autoComplete="off" type="text" id="txtSendMessage" className="full-width" />
               </form>
             </div>
+
+
           </div>
         </div>
       </div>

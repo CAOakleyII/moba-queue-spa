@@ -27,7 +27,7 @@ export default class NavBar extends Component {
         </div>
         <div id="mobile-side-nav" className="mobile-side-nav">
           <ul id="slide-out" className="side-nav-list">
-            <li className="nav-item side-item" data-position="bottom" data-delay="50" data-tooltip="Accounts Coming Soon!"> Login </li>
+            <li className="nav-item side-item"> <a href="#" data-position="bottom" className="tooltipped" data-delay="50" data-tooltip="Accounts Coming Soon!"> Login</a> </li>
             <li className="nav-item side-item"> <Link to="/party"> Party </Link> </li>
           </ul>
         </div>

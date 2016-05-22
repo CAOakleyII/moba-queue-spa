@@ -33,6 +33,11 @@
     z-index:10;
     position: fixed !important;
   }
+  .desktop-party-list {
+    width: 200px !important;
+    position: fixed;
+    overflow-x: hidden;
+  }
   .party-list {
     padding-top: 30px;
     color: white;
@@ -40,6 +45,8 @@
     height: 89.4vh;
     background-color: rgba(37,30,37, 1);
     border-right: 1px solid rgba(125, 98, 125, 0.3);
+    z-index: 5;
+
 
 
     .party-header {
@@ -74,7 +81,18 @@
   .chat-box {
     .chat {
       color: white;
-
+      position: fixed;
+      left: 200px;
+      top: 95px;
+      height: 100%;
+      overflow-y: scroll;
+      width: 91.33333%;
+      padding-bottom: 180px;
+      padding-left: 10px;
+      margin-top: 20px;
+      @media screen and (max-width: 600px) {
+        left: 8.2% !important;
+      }
       .chat-message {
         padding: 12px 5px;
 
@@ -102,9 +120,16 @@
     }
     .message {
       bottom: 0;
-      position: fixed;
-      min-width: 81%;
+      position: absolute;
+      width: 60%;
       color: white;
+      left: 200px;
+      background-color: #202020;
+      z-index: 1;
+      input {
+        margin-left: 10px;
+        padding-left: 20px;
+      }
       input::-moz-placeholder{
         color: rgba(255,255,255,0.5);
         font-style: italic;
@@ -120,6 +145,28 @@
         font-style: italic;
         font-size: 0.9rem;
       }
+      @media screen and (max-width: 600px) {
+        left: 8.2% !important;
+      }
     }
+
   }
+}
+
+div::-webkit-scrollbar {
+    width: 0.877rem;
+    height: 0.877rem
+}
+
+div::-webkit-scrollbar-thumb {
+    margin-top: 6px;
+    background: rgba(17,17,17,0.8);
+    border: 2px solid rgba(17,17,17,0);
+    background-clip: padding-box
+}
+
+div::-webkit-scrollbar-track {
+    margin-top: 6px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    padding: 10px
 }
