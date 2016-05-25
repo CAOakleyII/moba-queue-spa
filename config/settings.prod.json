@@ -1,0 +1,5 @@
+{
+    "public" : {
+      "serverEngineUrl" : "http://engine.cue.ninja:6543"
+  }
+}

@@ -5,8 +5,14 @@ export default class QueueDialog extends Component {
   constructor(props){
     super(props);
     this.state = {
-      roles : ["ADC", "Support", "Mid", "Jungle", "Solo"]
+      roles : ["ADC", "Support", "Mid", "Jungle", "Solo"],
+      platforms: ["PC", "Xbox", "PS4"],
+      regions: ["NA", "EU", "AUS"],
+      selectedPlatform: "PC"
     };
+  }
+  componentDidMount(){
+    $(`.platform-option.platform-${this.state.selectedPlatform}`).addClass('selected');
   }
   onQueueSubmit(e){
     e.preventDefault();
@@ -44,13 +50,40 @@ export default class QueueDialog extends Component {
     $('.queue-wait-trigger').click();
 
   }
+  onPlatformSelect(platform){
+    var selected = $('.platform-option.selected')
+     if (selected) {
+       $(selected).removeClass('selected');
+     }
+     $(`.platform-option.platform-${platform}`).addClass('selected');
+
+     this.state.selectedPlatform = platform;
+     this.setState(this.state);
+
+  }
+  onRegionSelect(region) {
+    this.state.selectedRegion = region;
+    this.setState(this.state);
+  }
   mapRoles(role, index) {
     return (
-      <p key={index}>
+      <span key={index} className="role">
         <input id={role} name="roles" data-type="array" value={role} type="checkbox" />
         <label htmlFor={role}> {role} </label>
-      </p>
+      </span>
     );
+  }
+  mapPlatforms(platform, index) {
+    return  (
+      <div key={index} className={`col s4 center-align waves-effect waves-light platform-option platform-${platform}`} onClick={this.onPlatformSelect.bind(this, platform)}>
+        { platform }
+      </div>
+    )
+  }
+  mapRegions(region, index) {
+    return (
+      <li key={index} className="region-item"><a className={`btn-floating region-option region-${region} center-align`} onClick={this.onRegionSelect.bind(this, region)}>{region}</a></li>
+    )
   }
   render() {
 
@@ -58,32 +91,55 @@ export default class QueueDialog extends Component {
       <div className="queuedialog-div">
         <div id={this.props.elementId} className="modal bottom-sheet">
           <form action="#" onSubmit={this.onQueueSubmit.bind(this)}>
+          <input type="hidden" name="platform" value={this.state.selectedPlatform} />
+          <input type="hidden" name="region" value={this.state.selectedRegion} />
              <div className="modal-content">
+               <div className="row platforms-row">
+                  { this.state.platforms.map(this.mapPlatforms.bind(this)) }
+               </div>
                <div className="row">
-                <div className="col s10 offset-s1 col m2 offset-m2">
+                <div className="col s10 offset-s1 col m4 center-align">
                     <h5> Select Role(s) </h5>
-                  { this.state.roles.map(this.mapRoles) }
+                    <div className="center-align">
+                      { this.state.roles.map(this.mapRoles) }
+                    </div>
                  </div>
-                 <div className="col s10 offset-s1 col m2 offset-m1">
+                 <div className="col s10 offset-s1 col m4 center-align">
                     <h5> In Game Name </h5>
                     <p>
                       <input type="text" name="ign" id="txtIGN" placeholder="Cervial" />
                     </p>
                  </div>
-                 <div className="col s10 offset-s1 col m2 offset-m1">
+                 <div className="col s10 offset-s1 col m4 center-align">
                     <h5> Game Mode </h5>
-                    <p>
-                      <input name="gamemode" type="radio" value="rankedConquest" data-type="radio" id="rankedConquest" defaultChecked="true" />
-                      <label htmlFor="rankedConquest"> Ranked Conquest </label>
-                    </p>
-                    <p>
-                      <input name="gamemode" type="radio" value="normalConquest" data-type="radio" id="normalConquest" />
+                    <p className="center-align">
+                      <input name="gamemode" type="radio" value="normalConquest" data-type="radio" id="normalConquest" defaultChecked="true"/>
                       <label htmlFor="normalConquest"> Normal Conquest </label>
+                    </p>
+                    <p className="center-align">
+                      <input name="gamemode" type="radio" value="rankedConquest" data-type="radio" id="rankedConquest" disabled />
+                      <label htmlFor="rankedConquest"  data-position="bottom" className="tooltipped" data-delay="50" data-tooltip="Ranked Temporarily Disabled." > Ranked Conquest </label>
                     </p>
                  </div>
                </div>
              </div>
              <div className="queue-dialog-footer center">
+             {
+               this.state.selectedPlatform == "PC" ?
+               <div className="fixed-action-btn horizontal">
+
+                    { !this.state.selectedRegion ?
+                      <a className="btn-floating btn red">
+                        <i className="fa fa-globe" aria-hidden="true"></i>
+                      </a> :
+                      <a className={`btn-floating btn center-align region-${this.state.selectedRegion}`}> { this.state.selectedRegion } </a>
+                    }
+                  <ul className="region-options">
+                    { this.state.regions.map(this.mapRegions.bind(this)) }
+                  </ul>
+                </div>
+                : null
+                }
                <button type="submit" className="modal-action modal-close waves-effect btn waves-green btn-flat light-blue darken-3 white-text"> Submit </button>
              </div>
            </form>

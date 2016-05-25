@@ -22,6 +22,9 @@ export default class Party extends Component {
       }
     };
     $('.mobile-party-list').animate({width:'8.333333%'}, 0);
+    if ($('.lean-overlay')) {
+      $('.lean-overlay').closeModal();
+    }
   }
   onRetrieveParty(party){
     this.state.party = party;
