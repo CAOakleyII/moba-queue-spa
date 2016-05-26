@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import { HTTP } from 'meteor/http';
+import Form from '../components/Form.jsx';
 
-export default class QueueDialog extends Component {
+export default class QueueDialog extends Form {
   constructor(props){
     super(props);
     this.state = {
@@ -17,33 +18,31 @@ export default class QueueDialog extends Component {
   onQueueSubmit(e){
     e.preventDefault();
 
-    // serialize form
-    var data = {};
-    var inputs = [].slice.call(e.target.getElementsByTagName('input'));
-    inputs.forEach(input => {
-      if (input.getAttribute('data-type') === "array") {
-        if (!data[input.name]) {
-          data[input.name] = [];
-        }
-        var role = {};
-        if(input.checked) {
-          data[input.name].push(input.value);
-        }
-      }
-      else if (input.getAttribute('data-type') === "radio") {
-        if(input.checked){
-          data[input.name] = input.value;
-        }
-      }
-      else {
-        data[input.name] = input.value;
-      }
-    });
+    // remove validation errors
+    $('#roleRequired').hide();
+
+    // check for validity
+    if(!e.target.checkValidity()) {
+      return;
+    }
+
+    var data = this.serialize(e.target);
+
+    if (data.roles.length <= 0) {
+      $('#roleRequired').show();
+      return;
+    }
+
+    if(!this.state.selectedRegion && this.state.selectedPlatform == "PC") {
+      data.region = "NA";
+    }
 
     // Send data to the server, set data in local storage.
     socket.emit('join-queue', data);
     window.inQueue = true;
     localStorage.setItem('queueData', JSON.stringify(data));
+
+    $(`#${this.props.elementId}`).closeModal();
 
     // open wait dialog
     $('#queueWaitDialog').trigger('queue:start');
@@ -67,16 +66,29 @@ export default class QueueDialog extends Component {
   }
   mapRoles(role, index) {
     return (
-      <span key={index} className="role">
+      <p key={index} className="role col s4 offset-s5">
         <input id={role} name="roles" data-type="array" value={role} type="checkbox" />
         <label htmlFor={role}> {role} </label>
-      </span>
+      </p>
     );
   }
   mapPlatforms(platform, index) {
+    var icon = " ";
+    switch(platform){
+      case "PC":
+        icon += "ion-social-windows";
+        break;
+      case "Xbox":
+        icon += "ion-xbox";
+        break;
+      case "PS4":
+        icon += "ion-playstation";
+        break;
+    }
+
     return  (
       <div key={index} className={`col s4 center-align waves-effect waves-light platform-option platform-${platform}`} onClick={this.onPlatformSelect.bind(this, platform)}>
-        { platform }
+        <i className={"platform-icon icon" + icon}></i>
       </div>
     )
   }
@@ -100,14 +112,18 @@ export default class QueueDialog extends Component {
                <div className="row">
                 <div className="col s10 offset-s1 col m4 center-align">
                     <h5> Select Role(s) </h5>
-                    <div className="center-align">
+                    <div className="row">
+                      <div className="col s4 offset-s4 jquery-hide" id="roleRequired">
+                        <span className="red-text">Role required.</span>
+                      </div>
                       { this.state.roles.map(this.mapRoles) }
                     </div>
                  </div>
                  <div className="col s10 offset-s1 col m4 center-align">
                     <h5> In Game Name </h5>
                     <p>
-                      <input type="text" name="ign" id="txtIGN" placeholder="Cervial" />
+                      <input type="text" className="validate" name="ign" id="txtIGN" placeholder="Cervial" required />
+                       <label for="txtIGN" data-error="Valid in game name required."></label>
                     </p>
                  </div>
                  <div className="col s10 offset-s1 col m4 center-align">
@@ -129,7 +145,7 @@ export default class QueueDialog extends Component {
                <div className="fixed-action-btn horizontal">
 
                     { !this.state.selectedRegion ?
-                      <a className="btn-floating btn red">
+                      <a className="btn-floating btn red" data-error="Please select a region">
                         <i className="fa fa-globe" aria-hidden="true"></i>
                       </a> :
                       <a className={`btn-floating btn center-align region-${this.state.selectedRegion}`}> { this.state.selectedRegion } </a>
@@ -140,7 +156,7 @@ export default class QueueDialog extends Component {
                 </div>
                 : null
                 }
-               <button type="submit" className="modal-action modal-close waves-effect btn waves-green btn-flat light-blue darken-3 white-text"> Submit </button>
+               <button type="submit" className="modal-action waves-effect btn waves-green btn-flat light-blue darken-3 white-text"> Submit </button>
              </div>
            </form>
         </div>
