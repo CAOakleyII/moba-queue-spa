@@ -48,6 +48,7 @@ export default class QueueDialog extends Form {
     $('#queueWaitDialog').trigger('queue:start');
     $('.queue-wait-trigger').click();
 
+    $(`#${this.props.elementId}`).hide();
   }
   onPlatformSelect(platform){
     var selected = $('.platform-option.selected')

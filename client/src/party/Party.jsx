@@ -1,6 +1,7 @@
 import { Component } from 'react';
+import Form from '../components/Form.jsx';
 
-export default class Party extends Component {
+export default class Party extends Form {
   constructor(props){
     super(props);
 
@@ -32,11 +33,7 @@ export default class Party extends Component {
   }
   onSendMessage(e){
     e.preventDefault();
-    var data = {};
-    var inputs = [].slice.call(e.target.getElementsByTagName('input'));
-    inputs.forEach(input => {
-      data[input.name] = input.value;
-    });
+    var data = this.serialize(e.target);
     $('#txtSendMessage').val("");
     socket.emit('party-message', data);
   }
